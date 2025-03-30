@@ -5,7 +5,6 @@ void main() {
   performTask2();
 }
 
-/// Reads a double value from the console or returns the default value if input is empty or invalid.
 double inputDoubleOr(String prompt, {double defaultValue = 0.0}) {
   stdout.write('$prompt (default: $defaultValue): ');
   final input = stdin.readLineSync()?.trim();
@@ -21,11 +20,9 @@ double inputDoubleOr(String prompt, {double defaultValue = 0.0}) {
   return value;
 }
 
-/// Performs the first task: calculates fuel compositions and heating values.
 void performTask1() {
   print('Завдання 1 (Варіант 12 => брати рядок 2 з таблиці 1.3)\n');
 
-  // ***** ЗМІНИТЬ ТУТ: нові defaultValue для варіанта 2 *****
   final hydrogenPercent = inputDoubleOr("Вміст водню, %",  defaultValue: 4.2);
   final carbonPercent   = inputDoubleOr("Вміст вуглецю, %", defaultValue: 62.1);
   final sulfurPercent   = inputDoubleOr("Вміст сірки, %",   defaultValue: 3.3);
@@ -34,11 +31,9 @@ void performTask1() {
   final waterPercent    = inputDoubleOr("Вміст вологи, %", defaultValue: 7.0);
   final ashPercent      = inputDoubleOr("Вміст попелу, %", defaultValue: 15.8);
 
-  // Conversion coefficients (from working mass to dry/combustible)
   final kRs = 100 / (100 - waterPercent);
   final kRg = 100 / (100 - waterPercent - ashPercent);
 
-  // Calculate dry mass composition
   final dryHydrogen = hydrogenPercent * kRs;
   final dryCarbon   = carbonPercent   * kRs;
   final drySulfur   = sulfurPercent   * kRs;
@@ -46,25 +41,21 @@ void performTask1() {
   final dryOxygen   = oxygenPercent   * kRs;
   final dryAsh      = ashPercent      * kRs;
 
-  // Calculate combustible mass composition
   final combHydrogen = hydrogenPercent * kRg;
   final combCarbon   = carbonPercent   * kRg;
   final combSulfur   = sulfurPercent   * kRg;
   final combNitrogen = nitrogenPercent * kRg;
   final combOxygen   = oxygenPercent   * kRg;
 
-  // Calculate lower heating values (in МДж/кг) using formula Mendeléev
   final qrN = (339 * carbonPercent
              + 1030 * hydrogenPercent
              - 108.8 * (oxygenPercent - sulfurPercent)
              - 25 * waterPercent) / 1000;
 
-  // Перерахунок QrN у суху (QsN) і горючу (QhN) маси, за методикою з таблиці 1.2:
   final qsN = (qrN + 0.025 * waterPercent) * 100 / (100 - waterPercent);
   final qhN = (qrN + 0.025 * waterPercent) * 100
               / (100 - waterPercent - ashPercent);
 
-  // Підсумковий вивід
   print('''
 Завдання 1 результати (Варіант 12 => рядок 2 таблиці 1.3):
 Компонентний склад (робоча маса):
@@ -102,11 +93,9 @@ void performTask1() {
 ''');
 }
 
-/// Performs the second task: calculates the working mass composition and adjusted heating value for mazut.
 void performTask2() {
   print('Завдання 2:\n');
 
-  // Ці значення беремо з прикладу по мазуту (можна змінити, якщо у вас інші вимоги)
   final hg   = inputDoubleOr("Вміст водню, %", defaultValue: 11.2);
   final cg   = inputDoubleOr("Вміст вуглецю, %", defaultValue: 85.5);
   final og   = inputDoubleOr("Вміст кисню, %",  defaultValue: 0.8);
@@ -116,24 +105,17 @@ void performTask2() {
   final ag   = inputDoubleOr("Зольність сухої маси, %",          defaultValue: 0.15);
   final vg   = inputDoubleOr("Вміст ванадію, мг/кг",             defaultValue: 333.3);
 
-  // Calculate the working mass composition of mazut
   final cp = cg * (100 - wg - ag) / 100;
   final hp = hg * (100 - wg - ag) / 100;
   final op = og * (100 - wg - ag) / 100;
 
-  // У початковому коді є приклад перерахунку сірки (sp) і попелу (ap).
-  // Зверніть увагу, що там був неточний вираз: sg * (100 - wg*0.1 - ag*0.1)/100,
-  // найпевніше мався на увазі просто (100 - wg - ag).
-  // Якщо ви хочете залишити оригінал – можна залишити.
   final sp = sg * (100 - wg - ag) / 100;
 
   final ap = ag * (100 - wg) / 100;
   final vp = vg * (100 - wg) / 100;
 
-  // Adjusted lower heating value for the working mass
   final qp = qdaf * ((100 - wg - ag) / 100) - 0.025 * wg;
 
-  // Output results
   print('''
 Завдання 2 результати (Приклад для мазуту):
 Склад горючої маси мазуту:
