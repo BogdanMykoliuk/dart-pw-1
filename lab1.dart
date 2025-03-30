@@ -6,15 +6,15 @@ void main() {
 }
 
 double inputDoubleOr(String prompt, {double defaultValue = 0.0}) {
-  stdout.write('$prompt (default: $defaultValue): ');
+  stdout.write('$prompt (за замовчуванням: $defaultValue): ');
   final input = stdin.readLineSync()?.trim();
   if (input == null || input.isEmpty) {
-    print('Empty input, using default value: $defaultValue');
+    print('Порожнє введення, використовується значення за замовчуванням: $defaultValue');
     return defaultValue;
   }
   final value = double.tryParse(input);
   if (value == null) {
-    print('Invalid input, using default value: $defaultValue');
+    print('Некоректне введення, використовується значення за замовчуванням: $defaultValue');
     return defaultValue;
   }
   return value;
@@ -108,9 +108,7 @@ void performTask2() {
   final cp = cg * (100 - wg - ag) / 100;
   final hp = hg * (100 - wg - ag) / 100;
   final op = og * (100 - wg - ag) / 100;
-
   final sp = sg * (100 - wg - ag) / 100;
-
   final ap = ag * (100 - wg) / 100;
   final vp = vg * (100 - wg) / 100;
 
